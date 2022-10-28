@@ -4,24 +4,50 @@
 
 int split(char line[128]);
 
+int validateID(char line[128]);
+
 int main(int argc, char **argv) {
     FILE *filePointer = fopen("C:\\Users\\alexa\\CLionProjects\\Coursework1\\grades.txt", "r");
-
+    printf("Input file. Opening.\n");
     char line[128];
     while(fgets(line, 128, filePointer) != NULL){
+        int studentID = validateID(line);
         int score = split(line);
+        printf("Correcting student %d grade %d\n",studentID,score);
+    }
+    fclose(filePointer);
+    printf("Input file. Closing.\n");
+}
+
+int validateID(char line[128]) {
+    int index = 1;
+    char studentid[7];
+    int validID = 1;
+    do{ //procures the student ID and validates that it is the right length
+        if (index < 9) {
+            studentid[index-1] = line[index];
+            index++;
+        }else{
+            validID = 0;
+        }
+    }while(line[index] != ' ');
+    if(validID == 1) {
+        return atoi(studentid);
+    }else{
+        return NULL;
     }
 }
+
 
 int split(char line[128]) {
     int total = 0;
     int amount = 0;
-    int index = 0;
+    int index = 1;
     char studentid[7];
     int validID = 1;
     do{ //procures the student ID and validates that it is the right length
-        if (index < 8) {
-            studentid[index] = line[index];
+        if (index < 9) {
+            studentid[index-1] = line[index];
             index++;
         }else{
             validID = 0;
@@ -36,6 +62,7 @@ int split(char line[128]) {
         }
     }
     if(validID == 1){
+        printf("Computing averages.\n");
         int numIndex = 0;
         char num[64];
         index++;
@@ -56,7 +83,17 @@ int split(char line[128]) {
                 numIndex++;
             }
             index++;
-        }while(index < 128);
+        }while(line[index] != '\n');
+        int score = atoi(num);//this adds the final value to total as it wont do that within the loop
+        if(score < 20){//rounds outliers to stop them affecting the average
+            score = 20;
+        }else if(score > 90){
+            score = 90;
+        }
+        total = total + score;
+        memset(num, 0, 64);
+        numIndex = 0;
+        amount++;
         float average = (float)total/(float)amount;//calculates the average score in decimal form
         int finalAvg = (int) average;
         if((average - finalAvg) >=0.5){//rounds to the nearest whole number
