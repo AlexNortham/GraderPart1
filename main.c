@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 int split(char line[128]);
 
@@ -8,14 +9,27 @@ int validateID(char line[128]);
 
 int main(int argc, char **argv) {
 
+    if(argc == 0){
+        printf("No input file name given. Exiting.\n");
+        exit(0);
+    }
     FILE *filePointer = fopen(argv[1], "r");
+    if(!(access(filePointer, F_OK) == 0)){
+        printf("Input file does not exist. Exiting.\n");
+        exit(0);
+    }
+    FILE *outputPointer = fopen("averages.txt", "w");
     printf("Input file. Opening.\n");
+    printf("Output file. Opening.\n");
     char line[128];
     printf("Computing averages.\n");
     while(fgets(line, 128, filePointer) != NULL){
         int studentID = validateID(line);
         int score = split(line);
-        printf("Correcting student %d grade %d\n",studentID,score);
+        char output[128];
+        snprintf(output, 128, ("Correcting student %d grade %d\n",studentID,score));
+        fputs(output, outputPointer);
+
     }
     fclose(filePointer);
     printf("Input file. Closing.\n");
