@@ -7,10 +7,11 @@ int split(char line[128]);
 int validateID(char line[128]);
 
 int main(int argc, char **argv) {
-    printf("%s", argv);
-    FILE *filePointer = fopen(argv, "r");
+
+    FILE *filePointer = fopen(argv[1], "r");
     printf("Input file. Opening.\n");
     char line[128];
+    printf("Computing averages.\n");
     while(fgets(line, 128, filePointer) != NULL){
         int studentID = validateID(line);
         int score = split(line);
@@ -63,7 +64,7 @@ int split(char line[128]) {
         }
     }
     if(validID == 1){
-        printf("Computing averages.\n");
+
         int numIndex = 0;
         char num[64];
         index++;
