@@ -7,7 +7,8 @@ int split(char line[128]);
 int validateID(char line[128]);
 
 int main(int argc, char **argv) {
-    FILE *filePointer = fopen("C:\\Users\\alexa\\CLionProjects\\Coursework1\\grades.txt", "r");
+    printf("%s", argv);
+    FILE *filePointer = fopen(argv, "r");
     printf("Input file. Opening.\n");
     char line[128];
     while(fgets(line, 128, filePointer) != NULL){
