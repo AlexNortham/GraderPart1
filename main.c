@@ -13,8 +13,8 @@ int main(int argc, char **argv) {
         printf("No input file name given. Exiting.\n");
         exit(0);
     }
-    FILE *filePointer = fopen(argv[1], "r");
-    if(!(access(filePointer, F_OK) == 0)){
+    FILE *filePointer;
+    if(!(filePointer = fopen(argv[1], "r"))){
         printf("Input file does not exist. Exiting.\n");
         exit(0);
     }
@@ -26,9 +26,7 @@ int main(int argc, char **argv) {
     while(fgets(line, 128, filePointer) != NULL){
         int studentID = validateID(line);
         int score = split(line);
-        char output[128];
-        snprintf(output, 128, ("Correcting student %d grade %d\n",studentID,score));
-        fputs(output, outputPointer);
+        fprintf(outputPointer, " %d %d\n", studentID, score);
 
     }
     fclose(filePointer);
