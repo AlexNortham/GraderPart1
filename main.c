@@ -22,15 +22,20 @@ int main(int argc, char **argv) {
     printf("Input file. Opening.\n");
     printf("Output file. Opening.\n");
     char line[128];
+    printf("Checking data.\n");
     printf("Computing averages.\n");
     while(fgets(line, 128, filePointer) != NULL){
         int studentID = validateID(line);
         int score = split(line);
         fprintf(outputPointer, " %d %d\n", studentID, score);
+        printf("Correcting student %d grade %d\n",studentID,score); // requires student id and relevant grade
 
     }
     fclose(filePointer);
+    fclose(outputPointer);
     printf("Input file. Closing.\n");
+    printf("Output file. Closing.\n");
+
 }
 
 int validateID(char line[128]) {
@@ -114,6 +119,10 @@ int split(char line[128]) {
             finalAvg++;
         }
         return finalAvg;
+    }else{
+        printf("Found an invalid student id: %d. Exiting.\n",studentid); // requires student id
+        exit(0);
+
     }
 }
 
