@@ -53,7 +53,7 @@ int validateID(char line[128]) {
     if(validID == 1) {
         return atoi(studentid);
     }else{
-        return NULL;
+        return 0;
     }
 }
 
@@ -120,7 +120,7 @@ int split(char line[128]) {
         }
         return finalAvg;
     }else{
-        printf("Found an invalid student id: %d. Exiting.\n",studentid);
+        printf("Found an invalid student id: %s. Exiting.\n",studentid);
         exit(0);
         remove("averages.txt");
     }
