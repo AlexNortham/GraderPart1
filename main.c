@@ -8,13 +8,13 @@ int split(char line[128]);
 int validateID(char line[128]);
 
 int main(int argc, char **argv) {
-
-    if(argc == 0){
+    remove("averages.txt");//tries to remove existing averages text file
+    if(argc == 0){//checks for command line input
         printf("No input file name given. Exiting.\n");
         exit(0);
     }
     FILE *filePointer;
-    if(!(filePointer = fopen(argv[1], "r"))){
+    if(!(filePointer = fopen(argv[1], "r"))){//checks if file exists
         printf("Input file does not exist. Exiting.\n");
         exit(0);
     }
@@ -24,11 +24,11 @@ int main(int argc, char **argv) {
     char line[128];
     printf("Checking data.\n");
     printf("Computing averages.\n");
-    while(fgets(line, 128, filePointer) != NULL){
+    while(fgets(line, 128, filePointer) != NULL){//iterates through all lines in the file
         int studentID = validateID(line);
         int score = split(line);
-        fprintf(outputPointer, " %d %d\n", studentID, score);
-        printf("Correcting student %d grade %d\n",studentID,score); // requires student id and relevant grade
+        fprintf(outputPointer, " %d %d\n", studentID, score);//writes data to file
+        printf("Correcting student %d grade %d\n",studentID,score);
 
     }
     fclose(filePointer);
@@ -64,7 +64,7 @@ int split(char line[128]) {
     int index = 1;
     char studentid[7];
     int validID = 1;
-    do{ //procures the student ID and validates that it is the right length
+    do{ 
         if (index < 9) {
             studentid[index-1] = line[index];
             index++;
@@ -72,14 +72,14 @@ int split(char line[128]) {
             validID = 0;
         }
     }while(line[index] != ' ');
-    if(validID == 1){//checks that the student ID is in the correct range
+    if(validID == 1){
         int intID = atoi(studentid);
         if(intID >= 2022000 && intID <= 2022099){
 
         }else{
             validID = 0;
         }
-    }
+    }//repeats the validation process to get to the correct point in the line, additionally checking that its in the correct range
     if(validID == 1){
 
         int numIndex = 0;
@@ -120,9 +120,9 @@ int split(char line[128]) {
         }
         return finalAvg;
     }else{
-        printf("Found an invalid student id: %d. Exiting.\n",studentid); // requires student id
+        printf("Found an invalid student id: %d. Exiting.\n",studentid);
         exit(0);
-
+        remove("averages.txt");
     }
 }
 
